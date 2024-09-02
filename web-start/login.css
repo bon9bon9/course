@@ -1,0 +1,14 @@
+h1 { /* element 지정 */
+    color: darkred; 
+    text-align: center;
+}
+
+.login_inputs { /* class 지정 */
+    font-size: 25px;
+}
+
+#login_button { /* id 지정 */
+    font-size: 25px; 
+    width: 100px; 
+    height: 40px;
+}

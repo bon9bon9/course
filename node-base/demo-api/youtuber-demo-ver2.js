@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 
 app.listen(3000);
+app.use(express.json())
+
 var id = 1;
 let youtuberDB = new Map([
     [id++, {
@@ -42,7 +44,6 @@ app.get('/youtubers',function(req,res){
     res.json(jsonObject);
 })
 
-app.use(express.json())
 app.post('/youtubers',(req,res) => {
     const {channelTitle, sub, videoCnt} = req.body;
     let postJson = {
@@ -75,3 +76,24 @@ app.delete('/youtubers',(req,res) => {
     }
     res.json(json);
 })
+
+app.put('/youtubers/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    let youtuber = youtuberDB.get(id);
+    let json = { message: "등록되지 않은 유튜버 입니다." };
+
+    if (youtuber) {
+        const { channelTitle, sub, videoCnt } = req.body;
+        if (channelTitle !== undefined) {
+            youtuber.channelTitle = channelTitle;
+        }
+        if (sub !== undefined) {
+            youtuber.sub = sub;
+        }
+        if (videoCnt !== undefined) {
+            youtuber.videoCnt = videoCnt;
+        }
+        json.message = "유튜버 정보가 성공적으로 업데이트되었습니다.";
+    }
+    res.json(json);
+});

@@ -32,10 +32,13 @@ app.get('/youtubers/:id',function(req,res){
 })
 
 app.get('/youtubers',function(req,res){
-    let jsonObject = {};
-    youtuberDB.forEach(function(value, key){
-        jsonObject[key] = value;
-    })
+    let jsonObject = {message : "등록된 유튜버가 없습니다."};
+    if(youtuberDB.size != 0){
+        youtuberDB.forEach(function(value, key){
+            jsonObject[key] = value;
+        })
+        delete jsonObject.message;
+    }
     res.json(jsonObject);
 })
 
@@ -49,4 +52,26 @@ app.post('/youtubers',(req,res) => {
     };
     youtuberDB.set(id++, postJson)
     res.json({message : "유튜버가 등록되었습니다."})
+})
+
+app.delete('/youtubers/:id',(req,res) => {
+    let json = {message : `등록되지 않은 유튜버 입니다.`};
+    let {id} = req.params;
+    id = parseInt(id);
+    let youtuber = youtuberDB.get(id);
+    if(youtuber != undefined){
+        let channelTitle = youtuber.channelTitle;
+        youtuberDB.delete(id);
+        json = {message : `${channelTitle}님, 유튜버에서 삭제되었습니다.`}
+    }
+    res.json(json);
+})
+
+app.delete('/youtubers',(req,res) => {
+    let json = {message : `등록된 유튜버가 없습니다.`}
+    if(youtuberDB.size != 0){
+        youtuberDB.clear();
+        json = {message : `모든 유튜버가 삭제되었습니다.`}
+    }
+    res.json(json);
 })

@@ -1,10 +1,9 @@
 const express = require('express');
-const app = express();
-app.listen(3000);
-app.use(express.json());
+const router = express.Router();
+router.use(express.json());
 
 let userDB = [];
-app.post('/login', (req,res) => {
+router.post('/login', (req,res) => {
     const {id, pwd} = req.body
     if(id === undefined || pwd === undefined){
         return res.status(400).json(resJson("필수값 없음"));
@@ -18,7 +17,7 @@ app.post('/login', (req,res) => {
     res.json(resJson("성공",userCopy));
 }) // 로그인 api 
 
-app.post('/users', (req,res) => {
+router.post('/users', (req,res) => {
     const {id, pwd, name} = req.body
     if(id === undefined || pwd === undefined || name === undefined){
         return res.status(400).json(resJson("필수값 없음"));
@@ -30,7 +29,7 @@ app.post('/users', (req,res) => {
     res.json(resJson("성공",{name : name}));
 }) // 회원 생성 api 
 
-app.get('/users/:id', (req,res) => {
+router.get('/users/:id', (req,res) => {
     const {id} = req.params;
     let user = userDB.find(user => user.id == id);
     if(!user){
@@ -41,7 +40,7 @@ app.get('/users/:id', (req,res) => {
     res.json(resJson("조회 성공",userCopy));
 }) // 회원 개별 조회 api
 
-app.delete('/users', (req,res) => {
+router.delete('/users', (req,res) => {
     const {id} = req.body
     if(id === undefined){
         return res.status(400).json(resJson("필수값 없음"));
@@ -58,3 +57,5 @@ app.delete('/users', (req,res) => {
 function resJson(message,data){
     return {message : message, data : data};
 }
+
+module.exports = router;

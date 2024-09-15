@@ -63,7 +63,7 @@ router.put('', async (req,res) => {
         if(!channels.length){
             return res.status(404).json(resJson("객체 없음"));
         }
-        if(channel[0].u_idx != parseInt(userIdx)){
+        if(channels[0].u_idx != parseInt(userIdx)){
             return res.status(503).json(resJson("수정 권한 없음"));
         }
         await updateSetChannelName(idx, userIdx, name);
@@ -74,8 +74,8 @@ router.put('', async (req,res) => {
 }) // 채널명 수정 api
 
 router.delete('', async (req,res) => {
-    const {id, userIdx} = req.body
-    if(id === undefined || userIdx === undefined){
+    const {idx, userIdx} = req.body
+    if(idx === undefined || userIdx === undefined){
         return res.status(400).json(resJson("필수값 없음"));
     }
     try{
@@ -83,7 +83,7 @@ router.delete('', async (req,res) => {
         if(!channels.length){
             return res.status(404).json(resJson("객체 없음"));
         }
-        if(channel[0].u_idx != parseInt(userIdx)){
+        if(channels[0].u_idx != parseInt(userIdx)){
             return res.status(503).json(resJson("삭제 권한 없음"));
         }
         await deleteByIdx(idx, userIdx);
@@ -160,7 +160,7 @@ function countByUserIdx(idx){
 function insertChannel(name,userIdx){
     return new Promise((resolve, reject) => {
         conn.query(
-            `INSERT INTO channel (c_name, u_idx) VALUES (?,?,?)`,[name,userIdx],
+            `INSERT INTO channel (c_name, u_idx) VALUES (?,?)`,[name,userIdx],
             function (err, results){
                 if(err) return reject(err);
                 resolve(results.insertId);
@@ -169,10 +169,10 @@ function insertChannel(name,userIdx){
     }); // promise 함수 닫음
 }
 
-function deleteByIdx(idx){
+function deleteByIdx(idx, u_idx){
     return new Promise((resolve, reject)=>{
         conn.query(
-            `DELETE FROM channel WHERE u_idx = ${idx} and c_idx = ${c_idx}`,
+            `DELETE FROM channel WHERE u_idx = ${u_idx} and c_idx = ${idx}`,
             function(err,results){
                 if(err) return reject(err);
                 resolve(results);

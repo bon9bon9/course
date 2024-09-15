@@ -60,6 +60,7 @@ router.delete('/users', async (req,res) => {
         if(!user.length){
             return res.status(400).json(resJson("객체없음"));
         }
+        await deleteChannelByIdx(idx);
         await deleteByIdx(idx);
         return res.status(200).json(resJson("삭제 성공",user));
     }catch(err){
@@ -123,6 +124,18 @@ function deleteByIdx(idx){
     return new Promise((resolve, reject)=>{
         conn.query(
             `DELETE FROM user WHERE u_idx = ${idx}`,
+            function(err,results){
+                if(err) return reject(err);
+                resolve(results);
+            }
+        );
+    });
+}
+
+function deleteChannelByIdx(idx){
+    return new Promise((resolve, reject)=>{
+        conn.query(
+            `DELETE FROM channel WHERE u_idx = ${idx}`,
             function(err,results){
                 if(err) return reject(err);
                 resolve(results);

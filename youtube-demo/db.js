@@ -10,15 +10,5 @@ const connection = mysql.createConnection({
   dateStrings : true
 });
 
-// A simple SELECT query
-connection.query(
-  'SELECT * FROM `user`',
-  function (err, results, fields) {
-    console.log(results[0]);
-    let {u_idx, u_email, u_name} = results[0];
-    console.log(u_name);
-  }
-    
-  
-);
+module.exports = connection;
 

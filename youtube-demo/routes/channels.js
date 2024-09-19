@@ -1,21 +1,32 @@
 const express = require('express');
 const router = express.Router();
 const conn = require('../db');
+const {body, param, query, validationResult} = require('express-validator')
 
 router.use(express.json());
 
-router.post('', async (req,res) => {
-    const {name, userIdx} = req.body
-    if(name === undefined || userIdx === undefined){
-        return res.status(400).json(resJson("필수값 없음"));
+const validate = (req, res, next) => {
+    const err = validationResult(req);
+    if(!err.isEmpty()){
+        return res.status(400).json(err.array());
     }
+    return next(); // 다음 할 일로 가라! (미들웨어, 함수)
+}
+
+router.post('', [
+    body('userIdx').notEmpty().isInt(),
+    body('name').notEmpty().isString(),
+    validate
+],
+async (req,res) => {
+    const {name, userIdx} = req.body
     try{
         let user = await selectUserByUserIdx(userIdx);
-        if(!user){
+        if(!user.length){
             return res.status(400).json(resJson("잘못된 userIdx"));
         }
         let channelCnt = await countByUserIdx(userIdx);
-        if(channelCnt >= 100){
+        if(channelCnt >= 9){
             return res.status(400).json(resJson("최대 채널 갯수 초과"));
         }
         let channelIdx = await insertChannel(name, userIdx);
@@ -26,8 +37,11 @@ router.post('', async (req,res) => {
     }    
 }) // 채널 생성 api 
 
-router.get('', async (req,res) => {
-    // Map을 객체로 변환
+router.get('',[
+    query('userIdx').notEmpty().isInt(),
+    validate
+], 
+async (req,res) => {
     const {userIdx} = req.query;
     try{
         let channels = await selectByUserIdx(userIdx);
@@ -37,11 +51,12 @@ router.get('', async (req,res) => {
     }    
 }) // 채널 전체 조회 api
 
-router.get('/:idx', async (req,res) => {
+router.get('/:idx',[
+    param('idx').notEmpty().isInt(),
+    validate
+], 
+async (req,res) => {
     const {idx} = req.params;
-    if(idx === undefined){
-        return res.status(400).json(resJson("필수값 없음"));
-    }
     try{
         let channels = await selectByChannelIdx(idx);
         if(!channels.length){
@@ -53,11 +68,14 @@ router.get('/:idx', async (req,res) => {
     }      
 }) // 채널 개별 조회 api
 
-router.put('', async (req,res) => {
+router.put('',[
+    body('idx').notEmpty().isInt(),
+    body('userIdx').notEmpty().isInt(),
+    body('name').notEmpty().isString(),
+    validate
+] ,
+async (req,res) => {
     const {idx, userIdx, name} = req.body
-    if(idx === undefined || userIdx === undefined || name === undefined){
-        return res.status(400).json(resJson("필수값 없음"));
-    }
     try{
         let channels = await selectByChannelIdx(idx);
         if(!channels.length){
@@ -73,7 +91,12 @@ router.put('', async (req,res) => {
     }      
 }) // 채널명 수정 api
 
-router.delete('', async (req,res) => {
+router.delete('',[
+    body('idx').notEmpty().isInt(),
+    body('userIdx').notEmpty().isInt(),
+    validate
+], 
+async (req,res) => {
     const {idx, userIdx} = req.body
     if(idx === undefined || userIdx === undefined){
         return res.status(400).json(resJson("필수값 없음"));
@@ -148,10 +171,10 @@ function selectByChannelIdx(idx){
 function countByUserIdx(idx){
     return new Promise((resolve, reject) => {
         conn.query(
-            `SELECT count(*) FROM channel WHERE u_idx = ${idx} LIMIT 1`,
+            `SELECT count(*) as cnt FROM channel WHERE u_idx = ${idx} LIMIT 1`,
             function(err,results){
                 if(err) return reject(err);
-                resolve(results);
+                resolve(results[0].cnt);
             }
         );
     });

@@ -1,30 +1,57 @@
 const express = require('express');
 const router = express.Router();
 const conn = require('../db');
+const {body, param, query, validationResult} = require('express-validator')
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 router.use(express.json());
 
-router.post('/login', async (req,res) => {
-    const {email, pwd} = req.body
-    if(email === undefined || pwd === undefined){
-        return res.status(400).json(resJson("필수값 없음"));
+const validate = (req, res, next) => {
+    const err = validationResult(req);
+    if(!err.isEmpty()){
+        return res.status(400).json(err.array());
     }
+    return next(); // 다음 할 일로 가라! (미들웨어, 함수)
+}
+
+router.post('/login',[
+    body('email').notEmpty().isEmail(),
+    body('pwd').notEmpty().isString(),
+    validate
+] ,
+async (req,res) => {
+    const {email, pwd} = req.body
     try{
         let user = await selectByEmailAndPwd(email,pwd);
         if(!user.length){
-            return res.status(400).json(resJson("객체없음"));
+            return res.status(403).json(resJson("아이디 또는 비밀번호가 틀림"));
         }
-        return res.status(200).json(resJson("로그인 성공",user));
+        const token = jwt.sign({
+            u_idx : user
+        }, process.env.PRIVATE_KEY,{
+            expiresIn : '30m', // 30분!
+            issuer : "heewon" // 발행인
+        });
+        res.cookie("token",token,{
+            httpOnly :true
+        });
+        return res.status(200).json(resJson("로그인 성공"));
     }catch(err){
         return res.status(500).json(resJson(err));
     }
 }) // 로그인 api 
 
-router.post('/users', async (req,res) => {
+router.post('/users',[
+    body('email').notEmpty().isEmail(),
+    body('pwd').notEmpty().isString(),
+    body('name').notEmpty().isString(),
+    validate
+] ,
+async (req,res) => {
     const {email, pwd, name} = req.body
-    if(email === undefined || pwd === undefined || name === undefined){
-        return res.status(400).json(resJson("필수값 없음"));
-    }
     try{
         let exist = await selectByEmail(email);
         if(exist.length){
@@ -37,7 +64,11 @@ router.post('/users', async (req,res) => {
     }
 }) // 회원 생성 api 
 
-router.get('/users/:idx', async (req,res) => {
+router.get('/users/:idx',[
+    param('idx').notEmpty().isInt(),
+    validate
+] ,
+async (req,res) => {
     const {idx} = req.params;
     try{
         let user = await selectByIdx(idx);
@@ -50,11 +81,12 @@ router.get('/users/:idx', async (req,res) => {
     }
 }) // 회원 개별 조회 api
 
-router.delete('/users', async (req,res) => {
+router.delete('/users', [
+    body('idx').notEmpty().isInt(),
+    validate
+] ,
+async (req,res) => {
     const {idx} = req.body
-    if(idx === undefined){
-        return res.status(400).json(resJson("필수값 없음"));
-    }
     try{
         let user = await selectByIdx(idx);
         if(!user.length){

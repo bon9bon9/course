@@ -7,7 +7,7 @@ router.use(express.json());
 
 const validate = (req, res, next) => {
     const err = validationResult(req);
-    if(!err.isEmpty()){
+    if(err.notEmpty()){
         return res.status(400).json(err.array());
     }
     return next(); // 다음 할 일로 가라! (미들웨어, 함수)

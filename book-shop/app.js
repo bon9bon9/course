@@ -20,3 +20,6 @@ app.use("/orders", ordersRouter);
 
 const usersRouter = require('./routes/users');
 app.use("/users", usersRouter);
+
+const categoryRouter = require('./routes/category');
+app.use("/category", categoryRouter);

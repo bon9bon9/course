@@ -6,7 +6,7 @@ const {StatusCodes} = require('http-status-codes');
 
 dotenv.config();
 
-const {sendSql, sendSqlWithData, resJson, resSuccessJson, encodePwd, comparePwd} = require('../common');
+const {resJson, resSuccessJson, encodePwd, comparePwd} = require('../common');
 
 const join = (req,res) => {
     const {email, pwd} = req.body;
@@ -22,7 +22,8 @@ const join = (req,res) => {
         }
         res.status(StatusCodes.CREATED).json(resSuccessJson(results.insertId));
     });
-}
+};
+
 const login = (req,res) => {
     const {email, pwd} = req.body;
     let sql = 'SELECT * FROM user WHERE u_email = ?';

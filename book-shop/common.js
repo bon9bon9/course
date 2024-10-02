@@ -21,7 +21,12 @@ function sendSqlWithData(sql, values){
 };
 
 const resJson = (message, code, data) => {
-    return {message : message, code : code, data : data};
+    return {
+        message : message, 
+        code : code, 
+        data : data
+    };
+
 }
 
 const resSuccessJson = (data) => {
@@ -42,4 +47,11 @@ const comparePwd = (pwd, salt, inputPwd) => {
         return true;
     else false;
 }
-module.exports = { sendSql, sendSqlWithData, resJson, resSuccessJson, encodePwd, comparePwd};
+module.exports = { 
+    sendSql, 
+    sendSqlWithData, 
+    resJson, 
+    resSuccessJson, 
+    encodePwd, 
+    comparePwd
+};

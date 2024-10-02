@@ -29,8 +29,8 @@ const resJson = (message, code, data) => {
 
 }
 
-const resSuccessJson = (data) => {
-    return {message : "성공", code : 1, data : data};
+const resSuccessJson = (data, pageInfo) => {
+    return {message : "성공", code : 1, pageInfo : pageInfo, data : data};
 }
 
 const encodePwd = (pwd) => {
@@ -47,11 +47,29 @@ const comparePwd = (pwd, salt, inputPwd) => {
         return true;
     else false;
 }
+
+const getPagenateInfo = (page, size) => {
+    let pagenateInfo = {
+        page: page, 
+        size: size, 
+        sql : ""
+    };
+    if(page === undefined && size === undefined) return pagenateInfo;
+    if(page === undefined) pagenateInfo.page = 1;
+    if(size === undefined) pagenateInfo.size = 10;
+
+    let limit = pagenateInfo.size;
+    let offset = (pagenateInfo.page-1) * pagenateInfo.size;
+    
+    pagenateInfo.sql = ` LIMIT ${limit} OFFSET ${offset}`;
+    return pagenateInfo;
+}
 module.exports = { 
     sendSql, 
     sendSqlWithData, 
     resJson, 
     resSuccessJson, 
     encodePwd, 
-    comparePwd
+    comparePwd,
+    getPagenateInfo
 };

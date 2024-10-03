@@ -9,7 +9,7 @@ const createCart = (req,res) => {
     let sql = `INSERT INTO cart(book_idx, user_idx, c_quantity) VALUE( ?, ?, ?)`;
     conn.query(sql, [b_idx, u_idx, quantity], (err, result) => {
         if(err){
-            if(err.code.includes('ER_NO_REFERENCED_ROW')){
+            if(err.code.includes(MySQLErrors.ER_NO_REFERENCED_ROW.code)){
                 return res.status(StatusCodes.BAD_REQUEST).json(resJson("잘못된 b_idx 혹은 u_idx",-1,err))
             }
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(err);
@@ -68,7 +68,7 @@ function cartFilter(inputs){
     }
 
     if(inputs.c_idxs !== undefined) {
-        whereClauses.push(`c_idx IN(${inputs.c_idxs})`);
+        whereClauses.push(`c.c_idx IN(${inputs.c_idxs})`);
     }
 
     return whereClauses.length > 0 ? " WHERE " + whereClauses.join(" AND "): "";

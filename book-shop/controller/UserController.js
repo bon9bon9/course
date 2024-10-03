@@ -3,6 +3,7 @@ const conn = require('../mariadb');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const {StatusCodes} = require('http-status-codes');
+const MySQLErrors = require('../mysqlErrors');
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ const join = (req,res) => {
     let values = [email, newPwd, salt];
     conn.query(sql, values, (err,results) => {
         if (err){
-            if(err.code === 'ER_DUP_ENTRY')
+            if(err.code === MySQLErrors.ER_DUP_ENTRY.code)
                 return res.status(StatusCodes.BAD_REQUEST).json(resJson("중복된 아이디",-2));
             else
                 return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(resJson("실패",-1,err));

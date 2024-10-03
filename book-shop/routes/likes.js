@@ -3,12 +3,10 @@ const router = express.Router();
 
 router.use(express.json());
 
-// 좋아요/싫어요
-router.post('/:b_idx',[
+const { likeOrCancel } = require("../controller/LikeController");
 
-],(req,res) => {
+// 좋아요/좋아요 취소
 
-
-});
+router.post('/:b_idx', likeOrCancel);
 
 module.exports = router;

@@ -3,8 +3,9 @@ const app = express();
 
 const dotenv = require('dotenv');
 dotenv.config();
-5
-app.listen(process.env.PORT);
+
+app.listen(3000);
+console.log(process.env.PORT);
 
 const booksRouter = require('./routes/books');
 app.use("/books", booksRouter);

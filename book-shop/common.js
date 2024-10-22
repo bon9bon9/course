@@ -1,6 +1,9 @@
 const conn = require('./mariadb');
 const crypto = require('crypto'); // 기본 모듈 : 암호화를 담당
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 
+dotenv.config();
 
 function sendSql(sql){
     return new Promise((resolve, reject) => {
@@ -64,6 +67,14 @@ const getPagenateInfo = (page, size) => {
     pagenateInfo.sql = ` LIMIT ${limit} OFFSET ${offset}`;
     return pagenateInfo;
 }
+
+function decodeJwt(req){
+    let token = req.headers['authorization'];
+    let userData = jwt.verify(token, process.env.PRIVATE_KEY)
+    return userData.u_idx;
+}
+
+
 module.exports = { 
     sendSql, 
     sendSqlWithData, 
@@ -71,5 +82,6 @@ module.exports = {
     resSuccessJson, 
     encodePwd, 
     comparePwd,
-    getPagenateInfo
+    getPagenateInfo,
+    decodeJwt
 };

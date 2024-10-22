@@ -1,11 +1,12 @@
 const conn = require("../mariadb");
 const {StatusCodes} = require("http-status-codes");
 const MySQLErrors = require('../mysqlErrors');
-const {resJson, resSuccessJson} = require("../common");
+const {resJson, resSuccessJson, decodeJwt} = require("../common");
+
 
 const createCart = (req,res) => {
     const {b_idx, quantity} = req.body;
-    const u_idx = 1;
+    const u_idx = decodeJwt(req);
     let sql = `INSERT INTO cart(book_idx, user_idx, c_quantity) VALUE( ?, ?, ?)`;
     conn.query(sql, [b_idx, u_idx, quantity], (err, result) => {
         if(err){
@@ -37,7 +38,7 @@ const getCartList = (req,res) => {
 
 const deleteCart = (req,res) => {
     const {c_idx} = req.params;
-    const u_idx = 1;
+    const u_idx = decodeJwt(req);
 
     let selectSql = `SELECT * FROM cart WHERE c_idx = ?`;
     conn.query(selectSql, [c_idx], (err,result) => {

@@ -1,10 +1,13 @@
 const conn = require("../mariadb");
 const {StatusCodes} = require('http-status-codes');
-const {resJson} = require("../common");
+const {resJson, decodeJwt} = require("../common");
+const dotenv = require('dotenv')
+dotenv.config();
+
 
 const likeOrCancel = (req,res) => {
     const {b_idx} = req.params;
-    const u_idx = 1;
+    const u_idx = decodeJwt(req);
     let selectSql = `SELECT * FROM likes 
     WHERE book_idx = ?
     AND user_idx = ?`;

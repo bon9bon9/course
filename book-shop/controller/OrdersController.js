@@ -1,10 +1,10 @@
 const conn = require("../mariadb");
-const {resJson, resSuccessJson} = require("../common");
+const {resJson, resSuccessJson, decodeJwt} = require("../common");
 const {StatusCodes} = require('http-status-codes');
 
 const order = async (req,res) => {
     const orderInfo = [
-        1, // user_idx
+        decodeJwt(req), // user_idx
         req.body.address,
         req.body.address_detail,
         req.body.name,
@@ -63,7 +63,7 @@ const order = async (req,res) => {
 
 
 const orderList = async (req,res) => {
-    const user_idx = 1;
+    const user_idx = decodeJwt(req);
     let sql = `SELECT * FROM orders AS o WHERE o.user_idx = ?`
     try{
         let [results] = await conn.promise().query(sql,[user_idx]);
@@ -74,7 +74,7 @@ const orderList = async (req,res) => {
 };
 
 const orderDetailList = async (req,res) => {
-    const user_idx = 1;
+    const user_idx = decodeJwt(req);
     const {o_idx} = req.params;
     let sql = `SELECT * FROM orders_detail AS od 
     INNER JOIN orders AS o ON od.orders_idx = o.o_idx

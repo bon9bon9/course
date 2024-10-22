@@ -1,16 +1,16 @@
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
 
-const {resJson, resSuccessJson, getPagenateInfo} = require('../common');
-
+const {resJson, resSuccessJson, getPagenateInfo, decodeJwt} = require('../common');
 
 const getAll = (req,res) => {
     let {page, size} = req.query;
     let whereSql = bookFilters(req.query);
     let orderSql = bookOrder(req.query);
     let pagenateInfo = getPagenateInfo(page, size);
-
+    let token = req.headers['authorization'];
     let u_idx = undefined;
+    if(token !== undefined) u_idx = decodeJwt(req);
     let selectLikedSql = "0 AS liked";
     if(u_idx !== undefined){
         selectLikedSql = `MAX(CASE WHEN l.user_idx = ${u_idx} THEN 1 ELSE 0 END) AS liked`
@@ -48,7 +48,7 @@ const getAll = (req,res) => {
 const getDetail = (req,res) => {
     const {idx} = req.params;
 
-    let u_idx = 1;
+    const u_idx = decodeJwt(req);
     let selectLikedSql = "0 AS liked";
     if(u_idx !== undefined){
         selectLikedSql = `MAX(CASE WHEN l.user_idx = ${u_idx} THEN 1 ELSE 0 END) AS liked`

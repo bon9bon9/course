@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ClassCom from './ClassCom'
-import {FuncCom1, FuncCom2} from './FuncCom';
+import {FuncCom1, FuncCom2,FuncCom3} from './FuncCom';
 import {TodoList} from './todolist';
 import {Timer,Clock} from './Timer';
 import { MyWeather } from './myWeather';
@@ -34,6 +34,9 @@ function App() {
       <TodoList></TodoList>
       {/* <Timer></Timer> */}
       <Clock></Clock>
+      <FuncCom1></FuncCom1>
+      <FuncCom2 example = "hello"></FuncCom2>
+      <FuncCom3 example = "hello"></FuncCom3>
       <MyWeather weather="맑음">일기예보</MyWeather>
     </div>
   );

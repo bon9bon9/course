@@ -6,10 +6,22 @@ export function FuncCom1(){
   )
 }
 
-export const FuncCom2 = () =>{
+type exProps = {
+  example : string
+}
+
+export const FuncCom2 : React.FC<exProps> = (props) =>{
   return (
     <div>
-      함수형 컴포넌트 화살표함수 ver
+      {props.example}
+    </div>
+  )
+}
+
+export const FuncCom3 = (props : exProps) =>{
+  return (
+    <div>
+      {props.example}
     </div>
   )
 }

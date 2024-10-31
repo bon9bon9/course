@@ -5,6 +5,7 @@ import ClassCom from './ClassCom'
 import {FuncCom1, FuncCom2} from './FuncCom';
 import {TodoList} from './todolist';
 import {Timer,Clock} from './Timer';
+import { MyWeather } from './myWeather';
 
 function App() {
   let name = "리액트";
@@ -33,6 +34,7 @@ function App() {
       <TodoList></TodoList>
       {/* <Timer></Timer> */}
       <Clock></Clock>
+      <MyWeather weather="맑음">일기예보</MyWeather>
     </div>
   );
 }

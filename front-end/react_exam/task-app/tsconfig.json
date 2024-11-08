@@ -3,5 +3,10 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "noUnusedParameters": false, // 함수 인자
+    "noUnusedLocals": false, // 사용하지 않는 변수
+    // 다른 옵션들...
+  }
 }

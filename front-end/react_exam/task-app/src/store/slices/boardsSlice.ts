@@ -20,6 +20,16 @@ type TAddListAction = {
   list : IList;
 }
 
+type TSortAction = {
+  boardIndex : number;
+  droppableIdStart : string;
+  droppableIdEnd : string;
+  droppableIndexStart : number;
+  droppableIndexEnd : number;
+  draggableId : string;
+
+}
+
 type TAddTaskAction = {
   boardId : string;
   listId : string;
@@ -101,6 +111,15 @@ const boardsSlice = createSlice({
         :board
       )
     },
+    sort : (state, {payload} : PayloadAction<TSortAction> ) => {
+      const listStart = state.boardArray[payload.boardIndex].lists.find(
+        list => list.listId === payload.droppableIdStart)
+      const card = listStart?.tasks.splice(payload.droppableIndexStart,1);
+      const listEnd = state.boardArray[payload.boardIndex].lists.find(
+        list => list.listId === payload.droppableIdEnd);
+      listEnd?.tasks.splice(payload.droppableIndexEnd,0, ...card!);
+        
+    },
     setModalActive : (state, {payload} : PayloadAction<boolean>) => {
       state.modalActive = payload
     },
@@ -145,5 +164,5 @@ const boardsSlice = createSlice({
   }
 })
 
-export const {addBoard, deleteBoard, deleteList, setModalActive, addList, addTask, updateTask, deleteTask} = boardsSlice.actions
+export const {addBoard, deleteBoard, deleteList, setModalActive, addList, sort, addTask, updateTask, deleteTask} = boardsSlice.actions
 export const boardsReducer = boardsSlice.reducer

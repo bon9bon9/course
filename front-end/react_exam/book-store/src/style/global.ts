@@ -1,15 +1,11 @@
 import { createGlobalStyle } from "styled-components"
 import "sanitize.css"
-import { ThemeName } from "./theme";
 
-interface Props {
-  themeName : ThemeName;
-}
-export const GlobalStyle = createGlobalStyle<Props>`
+export const GlobalStyle = createGlobalStyle`
   body{
     padding : 0;
     margin : 0;
-    background-color : ${(props) => (props.themeName === 'light' ? 'white' : "black")}
+    background-color : ${({theme}) => (theme.global.background)}
   }
 
   h1 {
@@ -17,6 +13,6 @@ export const GlobalStyle = createGlobalStyle<Props>`
   }
 
   *{
-    color : ${(props) => (props.themeName === 'light' ? 'black' : "white")};
+    color : ${({theme}) => (theme.global.color)}
   }
 `;

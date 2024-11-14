@@ -53,8 +53,8 @@ const comparePwd = (pwd, salt, inputPwd) => {
 
 const getPagenateInfo = (page, size) => {
     let pagenateInfo = {
-        page: page, 
-        size: size, 
+        page: parseInt(page), 
+        size: parseInt(size), 
         sql : ""
     };
     if(page === undefined && size === undefined) return pagenateInfo;

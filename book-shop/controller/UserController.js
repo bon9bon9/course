@@ -63,12 +63,16 @@ const reset_post = (req,res) => {
 };
 
 const reset_put = (req,res) => {
-    const {idx, pwd} = req.body;
+    const {idx, pwd, email} = req.body;
     const {salt , newPwd} = encodePwd(pwd);
-    conn.query(`UPDATE user SET u_pwd = ?, u_salt = ? WHERE u_idx = ?`, 
-        [newPwd, salt, idx], 
+    conn.query(`UPDATE user SET u_pwd = ?, u_salt = ? WHERE u_idx = ? AND u_email = ?`, 
+        [newPwd, salt, idx, email], 
         (err, results) => {
-            res.json(resSuccessJson());
+            if(results.affectedRows == 1){
+                res.json(resSuccessJson());
+            }else{
+                return res.status(403).json(resJson("수정실패",-1));
+            }
     });
 
 };

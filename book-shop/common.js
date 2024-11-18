@@ -70,8 +70,13 @@ const getPagenateInfo = (page, size) => {
 
 function decodeJwt(req){
     let token = req.headers['authorization'];
-    let userData = jwt.verify(token, process.env.PRIVATE_KEY)
-    return userData.u_idx;
+    try{
+        let userData = jwt.verify(token, process.env.PRIVATE_KEY)
+        return userData.u_idx;
+    }catch(err){
+        return undefined;
+    }
+    
 }
 
 

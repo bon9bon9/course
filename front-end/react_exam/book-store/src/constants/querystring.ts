@@ -3,4 +3,5 @@ export const QUERYSTRING = {
   ORDER : "order",
   PAGE : "page",
   SIZE : "size",
+  VIEW : "view"
 }

@@ -32,8 +32,6 @@ const BooksFilter = () => {
     setSearchParams(newSearchParams);
   }
 
-  const currentCategory = searchParams.get(QUERYSTRING.CATEGORY_ID);
-
   return (
     <BooksFilterStyle>
       <div className="category">

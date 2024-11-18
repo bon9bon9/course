@@ -19,7 +19,7 @@ const Header = () => {
           {
             category.map((item) => (
               <li key = {item.bc_idx}>
-                <Link to={item.bc_idx === null ? '/books' : `/books/category_id=${item.bc_idx}`}>{item.bc_name}</Link>
+                <Link to={item.bc_idx === null ? '/books' : `/books?category=${item.bc_idx}`}>{item.bc_name}</Link>
               </li>
             ))
           }

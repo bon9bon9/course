@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom"
 import { Book } from "../models/book.model";
 import { Pagination } from "../models/pagination.model";
-import { fetchBooks } from "../api/books.api";
+import { fetchBook, fetchBooks } from "../api/books.api";
 import { QUERYSTRING } from "../constants/querystring";
 
 export const useBooks = () => {
@@ -29,4 +29,17 @@ export const useBooks = () => {
     })
   },[location.search]);
   return {books, pagination, isEmpty}
+}
+
+export const useBook = (bookId : string | undefined) => {
+  const [book, setBook] = useState<Book | null>(null);
+  useEffect(() => {
+    if(!bookId) return;
+    fetchBook(bookId).then((book) => {
+      if(book.data.length){
+        setBook(book.data[0]);
+      }else setBook(null);
+    });
+  },[bookId])
+  return {book};
 }

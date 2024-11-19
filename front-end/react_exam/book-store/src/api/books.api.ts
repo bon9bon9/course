@@ -32,3 +32,13 @@ export const fetchBooks = async (params : FetchBooksParams) => {
   }
   
 }
+
+export const fetchBook = async (bookId : string) => {
+  const response = await httpClient.get<FetchBooksResponse>(`/books/${bookId}`);
+  return response.data;
+}
+
+export const fetchLike = async (bookId : number) => {
+  const response = await httpClient.post(`/likes/${bookId}`);
+  return response.data;
+}

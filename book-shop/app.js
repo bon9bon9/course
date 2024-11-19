@@ -13,7 +13,7 @@ app.use(cors(corsOptions)); // 모든 요청에 대해 CORS 허용
 const dotenv = require('dotenv');
 dotenv.config();
 
-app.listen(3939);
+app.listen(process.env.PORT);
 console.log(process.env.PORT);
 
 const booksRouter = require('./routes/books');

@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import { Book } from '../../models/book.model';
 import { getImgSrc } from '../../utils/image';
 import { formatNumber } from '../../utils/format';
-import { FaHeart } from 'react-icons/fa';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { ViewMode } from './BooksViewSwitcher';
 import { Link } from 'react-router-dom';
 
@@ -24,7 +24,7 @@ const BookItem = ({book, view} : Props) => {
           <p className="author">{book.b_author}</p>
           <p className="price">{formatNumber(book.b_price)}원</p>
           <div className="likes">
-            <FaHeart/>
+            {book.liked ? <FaHeart/> : <FaRegHeart/>}
             <span>{book.likes}</span>
           </div>
         </div>

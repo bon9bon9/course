@@ -41,7 +41,7 @@ const login = (req,res) => {
         token = jwt.sign({
             u_idx : user.u_idx
         }, process.env.PRIVATE_KEY,{
-            expiresIn : '30m', // 30분!
+            expiresIn : '24h', // 30분!
             issuer : "heewon" // 발행인
         });
         res.cookie("token",token,{

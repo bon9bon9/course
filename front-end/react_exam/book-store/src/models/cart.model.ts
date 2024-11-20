@@ -9,4 +9,5 @@ export interface Cart {
   b_img: number,
   b_price: number,
   b_description:string,
+  b_summary:string,
 }

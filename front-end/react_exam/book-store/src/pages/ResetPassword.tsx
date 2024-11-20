@@ -16,7 +16,7 @@ export interface ResetPasswordProps {
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const showAlert = useAlert();
+  const {showAlert} = useAlert();
   const [resetRequested, setResetRequested] = useState(false);
   const [resetIdx, setResetIdx] = useState<number | null>(null);
   const { register ,handleSubmit, formState : {errors}} = useForm<ResetPasswordProps>();

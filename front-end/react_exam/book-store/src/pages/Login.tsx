@@ -15,7 +15,7 @@ export interface LoginProps {
 
 const Login = () => {
   const navigate = useNavigate();
-  const showAlert = useAlert();
+  const {showAlert} = useAlert();
   const {storeLogin} = useAuthStore();
   const { register ,handleSubmit, formState : {errors}} = useForm<LoginProps>();
   const onSubmit = (data : LoginProps) => {

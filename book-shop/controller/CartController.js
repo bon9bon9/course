@@ -22,9 +22,9 @@ const createCart = (req,res) => {
 };
 
 const getCartList = (req,res) => {
-    req.query.u_idx = 1;
+    req.query.u_idx = decodeJwt(req);
     let whereSql = cartFilter(req.query);
-    let sql = `SELECT c.*, b.b_title, b.b_img, b.b_price, b.b_description 
+    let sql = `SELECT c.*, b.b_title, b.b_img, b.b_price, b.b_description , b.b_summary
         FROM cart AS c
         LEFT JOIN book AS b ON c.book_idx = b.b_idx
         ${whereSql}`

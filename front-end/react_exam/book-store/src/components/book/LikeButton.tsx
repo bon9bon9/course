@@ -16,7 +16,7 @@ interface Props {
 const LikeButton = ({book} : Props) => {
   const [liked, setLiked] = useState<boolean>(book.liked === 1);
   const {isloggedIn } = useAuthStore();
-  const showAlert = useAlert();
+  const {showAlert} = useAlert();
 
   const handleClick = () => {
     if(!isloggedIn){

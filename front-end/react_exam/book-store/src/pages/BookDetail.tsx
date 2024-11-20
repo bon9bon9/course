@@ -9,6 +9,8 @@ import { formatDate, formatNumber } from '../utils/format';
 import { Link } from 'react-router-dom';
 import EllipsisBox from '../components/common/EllipsisBox';
 import LikeButton from '../components/book/LikeButton';
+import AddToCart from '../components/book/AddToCart';
+import { useAuthStore } from '../store/authStore';
 
 const bookInfoList = [
   {
@@ -49,6 +51,7 @@ const bookInfoList = [
 const BookDetail = () => {
   const { bookId } = useParams();
   const { book } = useBook(bookId);
+  const {isloggedIn } = useAuthStore();
   if (!book) return (<BooksEmpty/>);  
   return (
     <BookDetailStyle>
@@ -70,9 +73,9 @@ const BookDetail = () => {
           }
           <p className="summary">{book.b_summary}</p>
           <div className="like">
-            <LikeButton book = {book} onClick={() => {}}/>
+            <LikeButton book = {book}/>
           </div>
-          <div className="add-cart"></div>
+          <div className="add-cart">{isloggedIn && <AddToCart book={book}/>}</div>
         </div>
       </header>
       <div className="content">

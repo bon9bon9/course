@@ -14,3 +14,20 @@ export interface Order {
   created_at :string,
   updated_at :string,
 }
+
+
+export interface OrderItemInfo {
+  c_idxs : number[],
+  totalQuantity : number,
+  totalPrice : number,
+  firstBookTitle : string | null
+}
+
+export interface OrderSheet extends OrderItemInfo {
+  address : string,
+  address_detail : string,
+  name : string,
+  contact : string,
+  delivery_fee : number,
+  payment : string,
+}

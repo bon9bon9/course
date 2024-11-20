@@ -5,25 +5,27 @@ import { FaRegHeart } from "react-icons/fa";
 import { useState } from 'react';
 import { fetchLike } from '../../api/books.api';
 import Button from '../common/Button';
-import { getToken, useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { useAlert } from '../../hooks/useAlert';
 
 
 interface Props {
   book : Book;
-  onClick: () => void
 }
 
-const LikeButton = ({book, onClick} : Props) => {
+const LikeButton = ({book} : Props) => {
   const [liked, setLiked] = useState<boolean>(book.liked === 1);
+  const {isloggedIn } = useAuthStore();
+  const {showAlert} = useAlert();
+
   const handleClick = () => {
-    if(!getToken()){
-      window.alert("로그인이 필요한 서비스 입니다");
+    if(!isloggedIn){
+      showAlert("로그인이 필요한 서비스쨩");
       return;
-    }else{
-      fetchLike(book.b_idx);
-      setLiked(!liked);
     }
+    fetchLike(book.b_idx);
+    setLiked(!liked);
+    
     
   }
 

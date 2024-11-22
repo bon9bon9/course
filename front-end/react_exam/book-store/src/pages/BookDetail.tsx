@@ -11,6 +11,7 @@ import EllipsisBox from '../components/common/EllipsisBox';
 import LikeButton from '../components/book/LikeButton';
 import AddToCart from '../components/book/AddToCart';
 import { useAuthStore } from '../store/authStore';
+import BookReview from '../components/book/BookReview';
 
 const bookInfoList = [
   {
@@ -50,7 +51,7 @@ const bookInfoList = [
 
 const BookDetail = () => {
   const { bookId } = useParams();
-  const { book } = useBook(bookId);
+  const { book, reviews } = useBook(bookId);
   const {isloggedIn } = useAuthStore();
   if (!book) return (<BooksEmpty/>);  
   return (
@@ -83,6 +84,8 @@ const BookDetail = () => {
         <EllipsisBox>{book.b_description}</EllipsisBox>
         <Title size = "medium">목차</Title>
         <p>{book.b_index}</p>
+        <Title size = "medium">리뷰</Title>
+        <BookReview reviews={reviews}/>
       </div>
     </BookDetailStyle>
   );

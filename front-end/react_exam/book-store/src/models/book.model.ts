@@ -18,3 +18,12 @@ export interface Book {
   liked: number,
   likes: number
 }
+
+export interface Review {
+  id : number;
+  userName : string;
+  content : string;
+  createdAt : string;
+  score : number;
+
+}

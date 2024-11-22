@@ -68,6 +68,24 @@ const getDetail = (req,res) => {
     });
 }
 
+const getReview = (req, res) => {
+    const data = [ {
+        id : 1,
+        userName : "bob",
+        content : "감사",
+        createdAt : "2024-01-01",
+        score : 5,
+    },
+    {
+        id : 2,
+        userName : "bob2",
+        content : "감사2",
+        createdAt : "2024-01-01",
+        score : 6,
+    }]
+    res.json(data);
+}
+
 function bookFilters(inputs){
     let whereClauses = [];
 
@@ -102,5 +120,4 @@ function bookOrder(inputs){
 }
 
 
-
-module.exports = {getAll, getDetail};
+module.exports = {getAll, getDetail, getReview};

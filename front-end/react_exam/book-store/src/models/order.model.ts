@@ -15,6 +15,14 @@ export interface Order {
   updated_at :string,
 }
 
+export interface OrderDetail extends Order {
+  od_idx: number,
+  orders_idx: number,
+  book_idx: number,
+  od_quantity: number,
+  b_title : string,
+}
+
 
 export interface OrderItemInfo {
   c_idxs : number[],

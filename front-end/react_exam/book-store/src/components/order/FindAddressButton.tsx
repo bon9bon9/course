@@ -3,17 +3,17 @@ import Button from '../common/Button';
 import { useEffect } from 'react';
 
 interface Props {
-  onComplete : (address: string) => void;
+  onCompleted : (address: string) => void;
 }
 
 const SCRIPT_URL = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
 
 
-const FindAddressButton = ({onComplete} : Props) => {
+const FindAddressButton = ({onCompleted} : Props) => {
   const handleOpen = () => {
     new window.daum.Postcode({
-      onComplete : (data:any) => {
-        console.log(data);
+      oncomplete : (data:any) => {
+        onCompleted(data.address as string);
       }
     }).open();
   }

@@ -1,85 +1,27 @@
 import Layout from './components/layout/Layout';
-import Home from './pages/Home';
 import Error from './components/common/Error'
 import { BookStoreThemeProvider } from './context/themeContext';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Signup from './pages/Signup';
-import ResetPassword from './pages/ResetPassword';
-import Login from './pages/Login';
-import Books from './pages/Books';
-import BookDetail from './pages/BookDetail';
-import Cart from './pages/Cart';
-import Order from './pages/Order';
+import { routeInfo } from './router';
+import { QueryClientProvider } from 'react-query';
+import { queryClient } from './api/queryClient';
 
-const router = createBrowserRouter([
+
+const router = createBrowserRouter(routeInfo.map((route) => (
   {
-    path : '/',
-    element : <Layout><Home/></Layout>,
+    ...route,
+    element : <Layout>{route.element}</Layout>,
     errorElement : <Layout><Error/></Layout>
-  },
-  {
-    path: "/signup",
-    element : (
-      <Layout>
-        <Signup/>
-      </Layout>
-    )
-  },
-  {
-    path : "/reset",
-    element : (
-      <Layout>
-        <ResetPassword/>
-      </Layout>
-    )
-  },
-  {
-    path : "/login",
-    element : (
-      <Layout>
-        <Login/>
-      </Layout>
-    )
-  },
-  {
-    path : "/books",
-    element : (
-      <Layout>
-        <Books/>
-      </Layout>
-    )
-  },
-  {
-    path : "/books/:bookId",
-    element : (
-      <Layout>
-        <BookDetail/>
-      </Layout>
-    )
-  },
-  {
-    path : "/cart",
-    element : (
-      <Layout>
-        <Cart/>
-      </Layout>
-    )
-  },
-  {
-    path : "/order",
-    element : (
-      <Layout>
-        <Order/>
-      </Layout>
-    )
   }
-])
+)))
 
 function App() {
   return (
-    <BookStoreThemeProvider>
-        <RouterProvider router={router}/>
-    </BookStoreThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <BookStoreThemeProvider>
+          <RouterProvider router={router}/>
+      </BookStoreThemeProvider>
+    </QueryClientProvider>
     
   );
 }

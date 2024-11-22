@@ -78,6 +78,7 @@ const orderDetailList = async (req,res) => {
     const {o_idx} = req.params;
     let sql = `SELECT * FROM orders_detail AS od 
     INNER JOIN orders AS o ON od.orders_idx = o.o_idx
+    INNER JOIN book AS b ON od.book_idx = b.b_idx
     WHERE od.orders_idx = ? AND o.user_idx = ?`
     try{
         let [results] = await conn.promise().query(sql,[o_idx, user_idx]);

@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Title from '../components/common/Title';
 import { CartStyle } from './Cart';
 import CartSummary from '../components/cart/CartSummary';
@@ -7,21 +7,29 @@ import Button from '../components/common/Button';
 import InputText from '../components/common/InputText';
 import { useForm } from 'react-hook-form';
 import FindAddressButton from '../components/order/FindAddressButton';
+import { addOrder } from '../api/order.api';
+import { useAlert } from '../hooks/useAlert';
 
 const Order = () => {
   const location = useLocation();
-  const orderDataFromCart = location.state;
+  const {showAlert} = useAlert();
+  const navigate = useNavigate();
+  const orderDataFromCart : OrderItemInfo = location.state;
   const {totalQuantity, totalPrice, firstBookTitle} = orderDataFromCart;
 
-  const {register,handleSubmit, formState :{errors}} = useForm<OrderSheet>();
+  const {register,setValue, watch, handleSubmit, formState :{errors}} = useForm<OrderSheet>();
 
   const handlePay = (formData : OrderSheet) => {
     const orderData : OrderSheet = {
       ...formData, 
+      ...orderDataFromCart,
       delivery_fee : 3000,
       payment : 'CARD'
     };
-    console.log(orderData);
+    addOrder(orderData).then(() => {
+      showAlert("주문이 완료 되었습니다")
+      navigate("/orderlist");
+    })
   }
   return (
     <>
@@ -38,9 +46,10 @@ const Order = () => {
                 <div className="input">
                   <InputText 
                     inputType = "text"
+                    readOnly
                     {...register ("address",{required : true})}/>
                 </div>
-                <FindAddressButton onComplete = {(address) => {}}/>
+                <FindAddressButton onCompleted = {(address) => {setValue('address',address)}}/>
               </fieldset>
               {errors.address && <p className='error-text'>주소를 입력해주세요</p>}
               
@@ -48,6 +57,7 @@ const Order = () => {
                 <label>상세주소</label>
                 <div className="input">
                   <InputText inputType = "text"
+                    readOnly = {watch("address") ? false : true}
                   {...register ("address_detail",{required : true})}/>
                 </div>
               </fieldset>
